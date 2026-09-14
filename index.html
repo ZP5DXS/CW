@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<meta name="theme-color" content="#05070a" />
+<title>CW · A World Connected by Morse Code</title>
+<meta name="description" content="Free CW tools for learning, practice, operation, monitoring and community." />
+<style>
+:root{
+  --bg:#05070a;--panel:#0a1017;--panel2:#0e1720;--line:#203140;
+  --text:#eef7ff;--muted:#8ea5b7;--cyan:#65e7ff;--green:#83ff9f;--gold:#ffd36c;--red:#ff6f75;
+  --shadow:0 24px 80px rgba(0,0,0,.42);
+}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;overflow-x:hidden}
+a{color:inherit}.mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+.noise{position:fixed;inset:0;pointer-events:none;z-index:90;opacity:.035;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140' viewBox='0 0 140 140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E")}
+.gridbg{position:fixed;inset:0;z-index:-5;background:
+radial-gradient(circle at 50% 8%,rgba(101,231,255,.12),transparent 31%),
+linear-gradient(rgba(101,231,255,.032) 1px,transparent 1px),linear-gradient(90deg,rgba(101,231,255,.032) 1px,transparent 1px),#05070a;background-size:auto,42px 42px,42px 42px}
+.stars,.stars2{position:fixed;inset:-10vh -10vw;z-index:-4;pointer-events:none;background-image:radial-gradient(circle,#fff 0 1px,transparent 1.2px);background-size:68px 68px;opacity:.14;transform:translate3d(0,0,0)}
+.stars2{background-size:117px 117px;opacity:.08;filter:blur(.2px)}
+.nav{position:fixed;left:50%;top:14px;transform:translateX(-50%);z-index:60;width:min(1180px,calc(100% - 24px));display:flex;justify-content:space-between;align-items:center;padding:10px 14px;border:1px solid rgba(101,231,255,.16);background:rgba(5,8,12,.68);backdrop-filter:blur(16px);border-radius:14px;box-shadow:0 12px 40px rgba(0,0,0,.2)}
+.brand{display:flex;align-items:center;gap:9px;font-weight:950;letter-spacing:.08em}.brand-mark{width:29px;height:29px;border-radius:8px;display:grid;place-items:center;border:1px solid rgba(101,231,255,.38);background:linear-gradient(135deg,rgba(101,231,255,.16),rgba(131,255,159,.06));color:var(--cyan)}
+.navlinks{display:flex;gap:16px;font-size:12px;color:var(--muted)}.navlinks a{text-decoration:none}.navlinks a:hover{color:var(--text)}
+.wrap{width:min(1180px,calc(100% - 28px));margin:auto}
+.hero{min-height:100vh;display:grid;place-items:center;position:relative;padding:100px 0 70px}
+.hero-inner{text-align:center;position:relative;z-index:5;width:100%}
+.kicker{font:800 12px/1 ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.28em;color:var(--cyan);margin-bottom:16px}
+h1{font-size:clamp(46px,8.5vw,120px);line-height:.88;letter-spacing:-.07em;margin:0;font-weight:950}
+h1 span{display:block;color:transparent;-webkit-text-stroke:1px rgba(238,247,255,.58);text-shadow:0 0 40px rgba(101,231,255,.10)}
+.tagline{max-width:780px;margin:24px auto 0;color:#b7c8d6;font-size:clamp(15px,2vw,20px);line-height:1.65}
+.hero-actions{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:26px}.btn{padding:12px 16px;border-radius:10px;border:1px solid var(--line);background:rgba(10,16,23,.8);text-decoration:none;font-size:12px;font-weight:900}.btn.primary{border-color:rgba(101,231,255,.5);background:linear-gradient(135deg,rgba(101,231,255,.18),rgba(131,255,159,.08))}.btn:hover{transform:translateY(-1px);border-color:var(--cyan)}
+.world-wrap{position:relative;width:min(860px,92vw);height:min(520px,62vw);min-height:360px;margin:22px auto 0;perspective:900px}
+.world{position:absolute;left:50%;top:50%;width:min(490px,62vw);aspect-ratio:1;border-radius:50%;transform:translate(-50%,-50%);border:1px solid rgba(101,231,255,.28);box-shadow:inset 0 0 90px rgba(101,231,255,.08),0 0 100px rgba(101,231,255,.06);background:
+radial-gradient(circle at 35% 30%,rgba(101,231,255,.16),transparent 24%),
+repeating-radial-gradient(circle at 50% 50%,rgba(101,231,255,.08) 0 1px,transparent 1px 24px),
+repeating-linear-gradient(90deg,rgba(101,231,255,.06) 0 1px,transparent 1px 36px),
+repeating-linear-gradient(rgba(101,231,255,.06) 0 1px,transparent 1px 36px),rgba(5,10,15,.66);animation:float 7s ease-in-out infinite}
+.world:before{content:"";position:absolute;inset:13%;border-radius:50%;background:conic-gradient(from 120deg,transparent 0 10%,rgba(131,255,159,.18) 10% 11%,transparent 11% 33%,rgba(255,211,108,.15) 33% 34%,transparent 34% 70%,rgba(101,231,255,.17) 70% 71%,transparent 71%);filter:blur(.4px)}
+.orbit{position:absolute;left:50%;top:50%;width:72%;height:34%;transform:translate(-50%,-50%) rotate(-9deg);border:1px solid rgba(255,211,108,.24);border-radius:50%;box-shadow:0 0 30px rgba(255,211,108,.05)}
+.orbit:after{content:"";position:absolute;width:9px;height:9px;border-radius:50%;background:var(--gold);box-shadow:0 0 20px var(--gold);left:13%;top:16%;animation:blink 1.8s infinite}
+@keyframes float{50%{transform:translate(-50%,-52%) rotate(.8deg)}}@keyframes blink{50%{opacity:.25}}
+.master-cards{position:absolute;inset:0;pointer-events:none}.master-stat{position:absolute;min-width:180px;padding:12px 14px;border:1px solid rgba(101,231,255,.18);background:rgba(7,12,18,.72);backdrop-filter:blur(10px);border-radius:12px;box-shadow:var(--shadow);text-align:left}.master-stat:nth-child(1){left:2%;top:11%}.master-stat:nth-child(2){right:0;top:16%}.master-stat:nth-child(3){left:4%;bottom:10%}.master-stat:nth-child(4){right:3%;bottom:8%}.master-stat .n{font:950 28px/1 ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--text);letter-spacing:-.05em}.master-stat .l{font-size:9px;margin-top:6px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase}.live-dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 11px var(--green);margin-right:6px}.demo-badge{display:inline-flex;align-items:center;gap:7px;margin-top:12px;padding:6px 9px;border-radius:999px;border:1px solid rgba(255,211,108,.25);color:var(--gold);font:800 9px ui-monospace,SFMono-Regular,monospace;letter-spacing:.08em}
+section{padding:110px 0}.section-kicker{font:800 10px ui-monospace,SFMono-Regular,monospace;letter-spacing:.2em;color:var(--cyan)}.section-title{font-size:clamp(34px,6vw,72px);line-height:.95;letter-spacing:-.05em;margin:10px 0 18px}.section-copy{max-width:760px;color:var(--muted);font-size:16px;line-height:1.7}
+.ecosystem{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-top:38px}.tool{position:relative;overflow:hidden;border:1px solid var(--line);border-radius:18px;background:linear-gradient(145deg,rgba(13,22,31,.92),rgba(7,11,16,.92));padding:24px;min-height:310px;box-shadow:var(--shadow);transition:.2s}.tool:hover{transform:translateY(-3px);border-color:rgba(101,231,255,.35)}.tool:after{content:"";position:absolute;width:180px;height:180px;border-radius:50%;right:-75px;top:-75px;background:radial-gradient(circle,rgba(101,231,255,.12),transparent 65%)}
+.tool-top{display:flex;justify-content:space-between;gap:16px}.tool h3{font-size:28px;margin:0 0 7px;letter-spacing:-.03em}.tool p{color:var(--muted);line-height:1.55;margin:0;max-width:530px}.tool-badge{font:800 9px ui-monospace,SFMono-Regular,monospace;color:var(--green);white-space:nowrap}.tool-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:28px}.mini{border:1px solid rgba(142,165,183,.16);border-radius:10px;padding:12px 10px;background:rgba(255,255,255,.018)}.mini b{display:block;font:950 20px ui-monospace,SFMono-Regular,monospace;letter-spacing:-.04em}.mini span{display:block;margin-top:4px;font-size:8px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted)}.tool-links{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}.tool-links a{font-size:10px;text-decoration:none;border:1px solid var(--line);padding:8px 10px;border-radius:8px;color:#cfe0ec}.tool-links a:hover{border-color:var(--cyan);color:white}
+.live-section{position:relative}.broadcast{display:grid;grid-template-columns:1.5fr .8fr;gap:16px;margin-top:34px}.player{aspect-ratio:16/9;border:1px solid var(--line);border-radius:18px;overflow:hidden;background:#000;box-shadow:var(--shadow)}.player iframe{width:100%;height:100%;border:0}.live-panel{border:1px solid var(--line);border-radius:18px;background:linear-gradient(145deg,rgba(13,22,31,.94),rgba(7,11,16,.94));padding:22px}.live-panel h3{margin:0;font-size:25px}.live-now{margin-top:15px;padding:13px;border-radius:10px;background:#090e14;border:1px solid rgba(255,111,117,.22)}.live-now .red{color:var(--red);font-size:10px;font-weight:900;letter-spacing:.14em}.live-now b{display:block;margin-top:7px;font-size:16px}.live-metrics{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.impact-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:28px}.impact-item{padding:18px;border:1px solid var(--line);border-radius:13px;background:rgba(10,16,23,.72)}.impact-item b{display:block;font:950 26px ui-monospace,SFMono-Regular,monospace}.impact-item span{display:block;margin-top:5px;font-size:9px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase}
+.pota{border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:linear-gradient(180deg,rgba(9,18,13,.5),rgba(5,7,10,.2));overflow:hidden}.pixel-scene{height:210px;position:relative;margin-top:30px;border:1px solid rgba(131,255,159,.16);border-radius:16px;background:linear-gradient(#07131a 0 54%,#0b1a13 54% 100%);image-rendering:pixelated;overflow:hidden}.mountain{position:absolute;bottom:46%;width:0;height:0;border-left:120px solid transparent;border-right:120px solid transparent;border-bottom:120px solid #11252b;filter:drop-shadow(0 -1px 0 rgba(101,231,255,.14))}.m1{left:4%}.m2{left:24%;transform:scale(.8)}.m3{right:8%;transform:scale(1.1)}.ground{position:absolute;left:0;right:0;bottom:0;height:46%;background:repeating-linear-gradient(90deg,#0d2516 0 18px,#102a18 18px 36px)}.tree{position:absolute;bottom:22px;width:8px;height:58px;background:#715b3b}.tree:before,.tree:after{content:"";position:absolute;left:50%;transform:translateX(-50%);width:0;height:0;border-left:26px solid transparent;border-right:26px solid transparent;border-bottom:45px solid #1d5b31}.tree:before{bottom:24px}.tree:after{bottom:5px}.t1{left:8%}.t2{left:18%;transform:scale(.7)}.t3{right:14%}.tent{position:absolute;bottom:20px;left:50%;width:0;height:0;border-left:38px solid transparent;border-right:38px solid transparent;border-bottom:56px solid #d59745;transform:translateX(-50%)}.antenna{position:absolute;bottom:20px;left:62%;width:3px;height:130px;background:#a6cbd7}.antenna:before{content:"";position:absolute;top:14px;left:-45px;width:92px;height:2px;background:#a6cbd7;transform:rotate(-14deg)}.morse-sky{position:absolute;left:0;right:0;top:24px;text-align:center;font:900 14px ui-monospace,SFMono-Regular,monospace;color:rgba(101,231,255,.48);letter-spacing:.6em;animation:drift 12s linear infinite}@keyframes drift{50%{transform:translateX(20px)}}
+.footer{padding:80px 0 34px;text-align:center;color:var(--muted)}.footer strong{color:var(--text)}
+@media(max-width:860px){.navlinks{display:none}.ecosystem,.broadcast{grid-template-columns:1fr}.impact-grid{grid-template-columns:1fr 1fr}.master-stat{min-width:145px}.master-stat .n{font-size:22px}.world-wrap{height:520px}.tool-stats{grid-template-columns:1fr 1fr 1fr}}
+@media(max-width:560px){section{padding:80px 0}.world-wrap{height:560px}.world{width:78vw}.master-stat{position:absolute;min-width:132px;padding:10px}.master-stat:nth-child(1){left:0;top:2%}.master-stat:nth-child(2){right:0;top:13%}.master-stat:nth-child(3){left:0;bottom:6%}.master-stat:nth-child(4){right:0;bottom:1%}.tool-stats{grid-template-columns:1fr}.impact-grid{grid-template-columns:1fr 1fr}.tagline{font-size:15px}.pota .section-copy{font-size:14px}}
+</style>
+</head>
+<body>
+<div class="gridbg"></div><div class="stars"></div><div class="stars2"></div><div class="noise"></div>
+<nav class="nav">
+  <div class="brand"><span class="brand-mark">·−</span><span>CW</span></div>
+  <div class="navlinks"><a href="#ecosystem">Ecosystem</a><a href="#live">CW ON TV</a><a href="#impact">Impact</a><a href="#about">About</a></div>
+</nav>
+
+<main>
+<section class="hero" id="top">
+  <div class="wrap hero-inner">
+    <div class="kicker">FREE CW TOOLS FOR THE WORLD</div>
+    <h1>CW <span>ECOSYSTEM</span></h1>
+    <p class="tagline">Learn. Practice. Operate. Listen. Connect. A growing collection of free Morse code tools built for the global CW community.</p>
+    <div class="hero-actions"><a class="btn primary" href="#ecosystem">EXPLORE TOOLS ↓</a><a class="btn" href="#live">WATCH CW ON TV</a></div>
+    <div class="demo-badge">● DEMO DATA · LIVE BEHAVIOUR MOCKED</div>
+
+    <div class="world-wrap" data-parallax="18">
+      <div class="world"><div class="orbit"></div></div>
+      <div class="master-cards">
+        <div class="master-stat"><div class="n" data-master="tool_visits">0</div><div class="l"><span class="live-dot"></span>Total tool visits</div></div>
+        <div class="master-stat"><div class="n" data-master="countries">0</div><div class="l">Countries reached</div></div>
+        <div class="master-stat"><div class="n" data-master="cw_hours">0</div><div class="l">CW hours</div></div>
+        <div class="master-stat"><div class="n" data-master="qsos">0</div><div class="l">QSOs / QSO simulations</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="ecosystem">
+  <div class="wrap">
+    <div class="section-kicker">01 · DISCOVER</div>
+    <h2 class="section-title">One ecosystem.<br>Many ways to CW.</h2>
+    <p class="section-copy">Each tool has its own purpose and its own live metrics. Later, these counters can be fed directly from Supabase while this same interface stays untouched.</p>
+    <div class="ecosystem" id="toolGrid"></div>
+  </div>
+</section>
+
+<section class="live-section" id="live">
+  <div class="wrap">
+    <div class="section-kicker">02 · LIVE SIGNAL</div>
+    <h2 class="section-title">CW ON TV.<br>Always transmitting.</h2>
+    <p class="section-copy">The continuous live channel sits inside the ecosystem itself: lessons, familiarization, listening and a constant invitation to keep CW alive.</p>
+    <div class="broadcast">
+      <div class="player"><iframe src="https://www.youtube.com/embed/Bhd8-vvPzFc?playsinline=1&rel=0" title="CW ON TV Live" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div>
+      <div class="live-panel">
+        <div class="tool-badge"><span class="live-dot"></span>LIVE 24/7</div>
+        <h3>CW ON TV</h3>
+        <div class="live-now"><div class="red">NOW / AHORA</div><b>Continuous CW learning & practice</b></div>
+        <div class="live-metrics">
+          <div class="mini"><b data-tool="cw_on_tv.views">0</b><span>Views</span></div>
+          <div class="mini"><b data-tool="cw_on_tv.stream_hours">0</b><span>Stream hours</span></div>
+          <div class="mini"><b data-tool="cw_on_tv.lessons">0</b><span>Lessons aired</span></div>
+          <div class="mini"><b data-tool="cw_on_tv.countries">0</b><span>Countries</span></div>
+        </div>
+        <div class="tool-links"><a href="https://www.youtube.com/live/Bhd8-vvPzFc" target="_blank" rel="noopener">OPEN YOUTUBE ↗</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="impact">
+  <div class="wrap">
+    <div class="section-kicker">03 · MASTER IMPACT</div>
+    <h2 class="section-title">Measure the signal<br>we leave behind.</h2>
+    <p class="section-copy">Not vanity metrics: a transparent picture of how much time, practice, listening and operating activity the ecosystem is contributing to CW.</p>
+    <div class="impact-grid">
+      <div class="impact-item"><b data-master="tool_visits">0</b><span>Tool visits</span></div>
+      <div class="impact-item"><b data-master="cw_hours">0</b><span>Combined CW hours</span></div>
+      <div class="impact-item"><b data-master="lessons">0</b><span>Lessons / exercises</span></div>
+      <div class="impact-item"><b data-master="qsos">0</b><span>QSOs / simulations</span></div>
+      <div class="impact-item"><b data-master="audio_exports">0</b><span>Audio exports</span></div>
+      <div class="impact-item"><b data-master="video_exports">0</b><span>Video exports</span></div>
+      <div class="impact-item"><b data-master="countries">0</b><span>Countries reached</span></div>
+      <div class="impact-item"><b data-master="spots">0</b><span>RBN spots surfaced</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="pota" id="about">
+  <div class="wrap">
+    <div class="section-kicker">04 · A SMALL NOD TO PORTABLE CW</div>
+    <h2 class="section-title">Digital tools.<br>Radio soul.</h2>
+    <p class="section-copy">A little 8-bit / portable-radio language keeps the site from becoming another corporate dashboard. The serious metrics stay serious; the personality stays radio.</p>
+    <div class="pixel-scene">
+      <div class="morse-sky">· − · ·   − · −   · · ·   − − ·</div>
+      <div class="mountain m1"></div><div class="mountain m2"></div><div class="mountain m3"></div><div class="ground"></div>
+      <div class="tree t1"></div><div class="tree t2"></div><div class="tree t3"></div><div class="tent"></div><div class="antenna"></div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="footer"><div class="wrap"><strong>CW</strong> · Free tools for the Morse code community · 73 de ZP5DXS</div></footer>
+
+<script>
+/* ------------------------------------------------------------
+   DATA LAYER
+   Replace loadMetrics() later with Supabase / RPC calls.
+   UI does not need to change.
+------------------------------------------------------------- */
+const LINKS={
+  morse_practice:{site:'https://zp5dxs.github.io/morse-practice/',repo:'https://github.com/ZP5DXS/morse-practice'},
+  cw_studio:{site:'#',repo:'#'},
+  cw_network:{site:'https://zp5dxs.github.io/CW-network/',repo:'https://github.com/ZP5DXS/CW-network'},
+  cw_latam:{site:'https://zp5dxs.github.io/CW-LATAM/',repo:'https://github.com/ZP5DXS/CW-LATAM'},
+  cw_on_tv:{site:'https://www.youtube.com/live/Bhd8-vvPzFc',repo:'#'}
+};
+
+const MOCK_METRICS={
+  morse_practice:{title:'Morse Practice',desc:'Learn and train CW in the browser: lessons, listening, games, QSO practice and on-air tools.',visits:18432,countries:72,hours:1920,lessons:126400},
+  cw_studio:{title:'CW Studio',desc:'Create custom CW lessons, audio sessions and video material for structured practice.',sessions:4230,countries:41,hours:612,audio_exports:1380,video_exports:260},
+  cw_network:{title:'CW Network',desc:'A virtual HF-style CW operating environment built around practice, propagation and complete QSOs.',visits:9440,countries:64,hours:1040,qsos:8410},
+  cw_latam:{title:'CW LATAM Radar',desc:'Live 40 m CW activity radar powered by Reverse Beacon Network spots with a South America focus.',visits:7210,countries:38,spots:42891,hours:330},
+  cw_on_tv:{title:'CW ON TV',desc:'24/7 CW learning and familiarization stream in English and Spanish.',views:12580,countries:49,stream_hours:731,lessons:2840,hours:515}
+};
+
+function fmt(n){
+  if(typeof n!=='number')return n;
+  if(n>=1000000)return (n/1000000).toFixed(n%1000000?1:0)+'M';
+  return Math.round(n).toLocaleString('en-US');
+}
+function number(v){return Number(v)||0}
+function master(m){
+  return {
+    tool_visits:number(m.morse_practice.visits)+number(m.cw_studio.sessions)+number(m.cw_network.visits)+number(m.cw_latam.visits)+number(m.cw_on_tv.views),
+    countries:Math.max(...Object.values(m).map(x=>number(x.countries))), // demo proxy; later use union from DB
+    cw_hours:number(m.morse_practice.hours)+number(m.cw_studio.hours)+number(m.cw_network.hours)+number(m.cw_latam.hours)+number(m.cw_on_tv.hours),
+    qsos:number(m.cw_network.qsos),
+    lessons:number(m.morse_practice.lessons)+number(m.cw_on_tv.lessons),
+    audio_exports:number(m.cw_studio.audio_exports),
+    video_exports:number(m.cw_studio.video_exports),
+    spots:number(m.cw_latam.spots)
+  };
+}
+async function loadMetrics(){ return structuredClone(MOCK_METRICS); }
+
+const TOOL_STAT_MAP={
+  morse_practice:[['visits','Visits'],['countries','Countries'],['hours','Practice hours']],
+  cw_studio:[['sessions','Sessions'],['audio_exports','Audio exports'],['video_exports','Video exports']],
+  cw_network:[['qsos','QSOs'],['countries','Countries'],['hours','Operating hours']],
+  cw_latam:[['spots','RBN spots'],['countries','Countries'],['visits','Visits']]
+};
+
+let state;
+function card(key,data){
+  const stats=TOOL_STAT_MAP[key]; const links=LINKS[key];
+  return `<article class="tool" data-card="${key}">
+    <div class="tool-top"><div><div class="tool-badge"><span class="live-dot"></span>LIVE METRICS</div><h3>${data.title}</h3><p>${data.desc}</p></div></div>
+    <div class="tool-stats">${stats.map(([k,l])=>`<div class="mini"><b data-tool="${key}.${k}">${fmt(data[k])}</b><span>${l}</span></div>`).join('')}</div>
+    <div class="tool-links"><a href="${links.site}" target="_blank" rel="noopener">OPEN TOOL ↗</a>${links.repo!=='#'?`<a href="${links.repo}" target="_blank" rel="noopener">GITHUB ↗</a>`:''}</div>
+  </article>`;
+}
+function renderTools(m){document.querySelector('#toolGrid').innerHTML=['morse_practice','cw_studio','cw_network','cw_latam'].map(k=>card(k,m[k])).join('')}
+function animateTo(el,to){
+  const from=Number(el.dataset.raw||0),dur=650,start=performance.now();
+  el.dataset.raw=to;
+  function tick(t){const p=Math.min(1,(t-start)/dur),e=1-Math.pow(1-p,3);el.textContent=fmt(from+(to-from)*e);if(p<1)requestAnimationFrame(tick)}
+  requestAnimationFrame(tick);
+}
+function syncUI(){
+  const mm=master(state);
+  document.querySelectorAll('[data-master]').forEach(el=>animateTo(el,number(mm[el.dataset.master])));
+  document.querySelectorAll('[data-tool]').forEach(el=>{const [app,k]=el.dataset.tool.split('.');animateTo(el,number(state[app]?.[k]))});
+}
+function pulseDemo(){
+  // Simulate real-time Realtime subscriptions until DB is connected.
+  const r=Math.random();
+  if(r<.25)state.morse_practice.visits++;
+  else if(r<.42)state.cw_studio.sessions++;
+  else if(r<.58)state.cw_network.qsos++;
+  else if(r<.76)state.cw_latam.spots+=Math.ceil(Math.random()*3);
+  else state.cw_on_tv.views++;
+  if(Math.random()<.18)state.morse_practice.hours+=.02;
+  if(Math.random()<.12)state.cw_network.hours+=.02;
+  syncUI();
+}
+
+(async()=>{
+  state=await loadMetrics();renderTools(state);syncUI();
+  setInterval(pulseDemo,1800);
+})();
+
+/* Parallax */
+const p1=document.querySelector('.stars'),p2=document.querySelector('.stars2'),world=document.querySelector('[data-parallax]');
+addEventListener('pointermove',e=>{
+  const x=(e.clientX/innerWidth-.5),y=(e.clientY/innerHeight-.5);
+  p1.style.transform=`translate(${x*-8}px,${y*-8}px)`;p2.style.transform=`translate(${x*-15}px,${y*-15}px)`;
+  if(world)world.style.transform=`translate(${x*5}px,${y*5}px)`;
+},{passive:true});
+</script>
+</body>
+</html>
