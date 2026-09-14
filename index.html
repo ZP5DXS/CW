@@ -80,19 +80,38 @@ h1{
 
 .master-strip{
   display:grid;grid-template-columns:repeat(4,minmax(0,1fr));
-  gap:10px;margin:52px auto 0;max-width:980px;text-align:left
+  gap:12px;margin:52px auto 0;max-width:1000px;text-align:left
 }
 .master-stat{
-  padding:15px 16px;border-top:1px solid rgba(101,231,255,.28);
-  background:linear-gradient(180deg,rgba(101,231,255,.035),transparent)
+  position:relative;overflow:hidden;
+  padding:19px 18px 17px;border:1px solid rgba(101,231,255,.16);
+  border-radius:22px;
+  background:
+    radial-gradient(circle at 100% 0%,rgba(101,231,255,.09),transparent 42%),
+    linear-gradient(145deg,rgba(15,25,34,.88),rgba(7,12,17,.82));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.035),0 16px 42px rgba(0,0,0,.24);
+  backdrop-filter:blur(12px)
 }
+.master-stat:before{
+  content:"";display:block;width:26px;height:3px;border-radius:99px;
+  margin-bottom:17px;background:var(--cyan);box-shadow:0 0 14px rgba(101,231,255,.48)
+}
+.master-stat:nth-child(2):before{background:var(--green);box-shadow:0 0 14px rgba(131,255,159,.40)}
+.master-stat:nth-child(3):before{background:var(--gold);box-shadow:0 0 14px rgba(255,211,108,.38)}
+.master-stat:nth-child(4):before{background:#d4b0ff;box-shadow:0 0 14px rgba(212,176,255,.38)}
 .master-stat .n{
-  font:950 clamp(24px,3.8vw,42px)/1 ui-monospace,SFMono-Regular,Menlo,monospace;
-  letter-spacing:-.06em
+  font:950 clamp(27px,3.9vw,45px)/.95 ui-monospace,SFMono-Regular,Menlo,monospace;
+  letter-spacing:-.065em;font-variant-numeric:tabular-nums
 }
 .master-stat .l{
-  margin-top:7px;font-size:8px;color:var(--muted);
-  letter-spacing:.11em;text-transform:uppercase
+  margin-top:10px;font-size:8px;color:var(--muted);
+  letter-spacing:.12em;text-transform:uppercase;font-weight:850
+}
+.master-stat.bump{animation:metricPulse .48s ease}
+@keyframes metricPulse{
+  0%{transform:translateY(0);border-color:rgba(101,231,255,.16)}
+  45%{transform:translateY(-2px);border-color:rgba(101,231,255,.55);box-shadow:0 0 30px rgba(101,231,255,.10)}
+  100%{transform:translateY(0);border-color:rgba(101,231,255,.16)}
 }
 .live-dot{
   display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--green);
@@ -184,7 +203,7 @@ section{padding:90px 0}
 
 @media(pointer:fine){
   html,body,a,button{
-    cursor:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 28 28'%3E%3Cg fill='none' stroke='%2365e7ff' stroke-width='1.7' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 20h20'/%3E%3Cpath d='M8 18l9-8'/%3E%3Ccircle cx='18.5' cy='8.5' r='2.2' fill='%2365e7ff'/%3E%3Cpath d='M7 18h4M20 17v3'/%3E%3C/g%3E%3C/svg%3E") 5 22, auto
+    cursor:url("data:image/png;base64,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") 8 8, auto
   }
 }
 </style>
@@ -231,9 +250,9 @@ section{padding:90px 0}
     <h2 class="section-title">CW ON TV.</h2>
     <p class="section-copy">Continuous Morse code learning and listening, integrated directly into the ecosystem.</p>
     <div class="broadcast">
-      <div class="player"><iframe src="https://www.youtube.com/embed/Bhd8-vvPzFc?playsinline=1&rel=0" title="CW ON TV Live" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div>
+      <div class="player"><iframe src="https://www.youtube.com/embed/Bhd8-vvPzFc?autoplay=1&mute=1&playsinline=1&rel=0" title="CW ON TV Live" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div>
       <div class="live-panel">
-        <div class="tool-badge"><span class="live-dot"></span>LIVE 24/7</div>
+        <div class="tool-badge"><span class="live-dot"></span>LIVE 24/7 · AUTOPLAY</div>
         <h3>CW ON TV</h3>
         <div class="live-now"><div class="red">NOW / AHORA</div><b>Continuous CW learning & practice</b></div>
         <div class="live-metrics">
@@ -340,6 +359,19 @@ function pulseDemo(){
 })();
 
 
+
+
+const masterObserver=new MutationObserver(muts=>{
+  for(const m of muts){
+    const card=m.target.closest?.('.master-stat');
+    if(card){
+      card.classList.remove('bump');
+      void card.offsetWidth;
+      card.classList.add('bump');
+    }
+  }
+});
+document.querySelectorAll('.master-stat .n').forEach(el=>masterObserver.observe(el,{childList:true,characterData:true,subtree:true}));
 
 /* Gentle background motion only */
 const p1=document.querySelector('.stars'),p2=document.querySelector('.stars2');
