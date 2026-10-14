@@ -576,10 +576,21 @@ function flagImg(code,name=''){
  const label=name||code;
  return `<img src="assets/flags/${c}.svg" alt="${label}" loading="lazy" decoding="async">`;
 }
+let countryTickerSignature='';
+
 function renderTelemetry(st){
  const cc=[...st.countries].filter(x=>validCountryCode(x.code)).sort((a,b)=>(b.visitors||0)-(a.visitors||0));
- const chips=cc.map(x=>`<span class="ticker-chip flag-chip" title="${x.name||x.code}">${flagImg(x.code,x.name||x.code)}</span>`).join('');
- countryTicker.innerHTML=`<div class="country-ticker-group">${chips}</div><div class="country-ticker-group" aria-hidden="true">${chips}</div>`;
+
+ // El ticker solo se reconstruye cuando cambia realmente
+ // la lista/orden de paises. Asi Safari no reinicia
+ // continuamente la animacion.
+ const tickerSignature=cc.map(x=>x.code).join('|');
+
+ if(tickerSignature!==countryTickerSignature){
+   const chips=cc.map(x=>`<span class="ticker-chip flag-chip" title="${x.name||x.code}">${flagImg(x.code,x.name||x.code)}</span>`).join('');
+   countryTicker.innerHTML=`<div class="country-ticker-group">${chips}</div><div class="country-ticker-group" aria-hidden="true">${chips}</div>`;
+   countryTickerSignature=tickerSignature;
+ }
 
  countrySummaryTitle.textContent=lang==='es'
    ? `VER LOS ${cc.length} PAÍSES`
