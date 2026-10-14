@@ -570,6 +570,21 @@ toolGrid.addEventListener('click',e=>{const card=e.target.closest('.tool');if(!c
 toolGrid.addEventListener('keydown',e=>{const card=e.target.closest('.tool');if(card&&(e.key==='Enter'||e.key===' ')){e.preventDefault();window.open(card.dataset.site,'_blank','noopener')}});
 
 function validCountryCode(code){return /^[A-Z]{2}$/.test(code||'')}
+
+function countryName(code,fallback=''){
+ const c=String(code||'').trim().toUpperCase();
+ if(!validCountryCode(c))return fallback||c;
+
+ try{
+   const locale=lang==='es'?'es':'en';
+   const names=new Intl.DisplayNames([locale],{type:'region'});
+   const name=names.of(c);
+
+   if(name && name!==c)return name;
+ }catch(e){}
+
+ return fallback||c;
+}
 function flagImg(code,name=''){
  const c=String(code||'').toLowerCase();
  if(!/^[a-z]{2}$/.test(c))return '';
@@ -587,7 +602,10 @@ function renderTelemetry(st){
  const tickerSignature=cc.map(x=>x.code).join('|');
 
  if(tickerSignature!==countryTickerSignature){
-   const chips=cc.map(x=>`<span class="ticker-chip flag-chip" title="${x.name||x.code}">${flagImg(x.code,x.name||x.code)}</span>`).join('');
+   const chips=cc.map(x=>{
+     const name=countryName(x.code,x.name);
+     return `<span class="ticker-chip flag-chip" title="${name}" aria-label="${name}">${flagImg(x.code,name)}</span>`;
+   }).join('');
    countryTicker.innerHTML=`<div class="country-ticker-group">${chips}</div><div class="country-ticker-group" aria-hidden="true">${chips}</div>`;
    countryTickerSignature=tickerSignature;
  }
@@ -596,16 +614,19 @@ function renderTelemetry(st){
    ? `VER LOS ${cc.length} PAÍSES`
    : `VIEW ALL ${cc.length} COUNTRIES`;
 
- countrySummaryGrid.innerHTML=cc.map(x=>`
+ countrySummaryGrid.innerHTML=cc.map(x=>{
+   const name=countryName(x.code,x.name);
+   return `
    <div class="country-summary-item">
-     <span class="country-summary-flag">${flagImg(x.code,x.name||x.code)}</span>
-     <span class="country-summary-name" title="${x.name||x.code}">${x.name||x.code}</span>
+     <span class="country-summary-flag">${flagImg(x.code,name)}</span>
+     <span class="country-summary-name" title="${name}">${name}</span>
      <span class="country-summary-value">
        ${fmt(x.visitors||0)}
        <small>${lang==='es'?'VISITANTES':'VISITORS'}</small>
      </span>
    </div>
- `).join('');
+ `;
+ }).join('');
 }
 function render(st){STATE=st;toolGrid.innerHTML=['morse_practice','cw_network','cw_studio','cw_latam'].map(k=>card(k,st[k])).join('');document.querySelectorAll('[data-master]').forEach(e=>e.textContent=fmt(st.master[e.dataset.master],e.dataset.master==='cw_hours'?0:0));document.querySelectorAll('[data-tool="cw_on_tv.stream_hours"]').forEach(e=>e.textContent=fmt(st.tv.hours,1));let r=st.raw;epicToolHours.textContent=fmt((r.master.master.usage_seconds+r.latam.usage_seconds)/3600,1);epicPractice.textContent=fmt(r.master.master.practice_seconds/3600,1);epicOperators.textContent=fmt(r.latam.operators);epicDx.textContent=fmt(r.master.master.max_dx_km);epicVotes.textContent=fmt(r.latam.votes);epicChats.textContent=fmt(r.latam.chat_messages);epicGenerated.textContent=fmt(r.master.master.generated_items);epicOnAir.textContent=fmt(st.tv.hours,1);renderTelemetry(st);drawMap(st)}
 async function refresh(){try{render(norm(await load()));dataBadge.textContent='● LIVE DATA · GLOBAL CW IMPACT'}catch(e){console.error(e);dataBadge.textContent='● LIVE DATA · RETRYING'}}setLang(lang);refresh();setInterval(refresh,60000);
